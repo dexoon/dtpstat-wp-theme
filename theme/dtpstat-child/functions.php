@@ -6,7 +6,7 @@
 
 add_action( 'wp_enqueue_scripts', function () {
 	$dir = get_stylesheet_directory_uri();
-	$ver = '0.2.43';
+	$ver = '0.2.44';
 
 	// Бургер-меню — на всех страницах (на главной футера нет).
 	wp_enqueue_script( 'dtpstat-main', $dir . '/assets/js/main.js', [], $ver, true );
@@ -86,14 +86,16 @@ function dtpstat_post_categories( $post_id = null ) {
  * В макете полоса была нарисована на 78%, а подпись говорила 15 546 из
  * 50 000 (31%) — противоречие макета; по решению Ильи цифра и шкала
  * считаются из одной переменной, так что полоса всегда = raised/goal.
+ * Цифры настраиваются в .env сервера (DTP_FUND_RAISED/GOAL/DAYS →
+ * dtpstat-config.php, см. wordpress.env.example); ниже — значения по умолчанию.
  */
 function dtp_fund() {
 	static $fund = null;
 	if ( null === $fund ) {
 		$fund = apply_filters( 'dtp_fund', [
-			'raised' => 15546,
-			'goal'   => 50000,
-			'days'   => 6,
+			'raised' => (int) ( dtp_config( 'DTP_FUND_RAISED' ) ?: 15546 ),
+			'goal'   => (int) ( dtp_config( 'DTP_FUND_GOAL' ) ?: 50000 ),
+			'days'   => (int) ( dtp_config( 'DTP_FUND_DAYS' ) ?: 6 ),
 		] );
 	}
 	return $fund;

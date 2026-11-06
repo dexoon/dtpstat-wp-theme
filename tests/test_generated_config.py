@@ -76,6 +76,22 @@ class GeneratedConfigTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertIn('DATABASE_PASSWORD', result.stderr)
 
+    def test_fund_keys_accept_integers_reject_other(self):
+        for entry, ok in (
+            ('DTP_FUND_RAISED=15546\nDTP_FUND_GOAL=50000\nDTP_FUND_DAYS=6', True),
+            ('DTP_FUND_RAISED=\nDTP_FUND_GOAL=\nDTP_FUND_DAYS=', True),
+            ('DTP_FUND_RAISED=15 546', False),
+            ('DTP_FUND_GOAL=50k', False),
+            ('DTP_FUND_DAYS=-6', False),
+        ):
+            with self.subTest(entry=entry):
+                self.write_env(SAMPLE + '\n' + entry)
+                code = self.call('--check').returncode
+                if ok:
+                    self.assertEqual(code, 0)
+                else:
+                    self.assertNotEqual(code, 0)
+
     def test_required_map_and_details_urls(self):
         self.write_env('DTP_MAP_URL=https://map.example.org\n')
         result = self.call('--check')
