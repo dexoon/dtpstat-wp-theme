@@ -6,7 +6,7 @@
 
 add_action( 'wp_enqueue_scripts', function () {
 	$dir = get_stylesheet_directory_uri();
-	$ver = '0.2.44';
+	$ver = '0.2.45';
 
 	// Бургер-меню — на всех страницах (на главной футера нет).
 	wp_enqueue_script( 'dtpstat-main', $dir . '/assets/js/main.js', [], $ver, true );
@@ -86,19 +86,35 @@ function dtpstat_post_categories( $post_id = null ) {
  * В макете полоса была нарисована на 78%, а подпись говорила 15 546 из
  * 50 000 (31%) — противоречие макета; по решению Ильи цифра и шкала
  * считаются из одной переменной, так что полоса всегда = raised/goal.
- * Цифры настраиваются в .env сервера (DTP_FUND_RAISED/GOAL/DAYS →
- * dtpstat-config.php, см. wordpress.env.example); ниже — значения по умолчанию.
+ * Приоритет значения: админка (Настройки → Данные сбора, option
+ * dtp_fund_settings) → .env сервера (DTP_FUND_RAISED/GOAL/DAYS →
+ * dtpstat-config.php) → встроенные значения ниже.
  */
 function dtp_fund() {
 	static $fund = null;
 	if ( null === $fund ) {
+		$o = get_option( 'dtp_fund_settings' );
+		$o = is_array( $o ) ? $o : [];
 		$fund = apply_filters( 'dtp_fund', [
-			'raised' => (int) ( dtp_config( 'DTP_FUND_RAISED' ) ?: 15546 ),
-			'goal'   => (int) ( dtp_config( 'DTP_FUND_GOAL' ) ?: 50000 ),
-			'days'   => (int) ( dtp_config( 'DTP_FUND_DAYS' ) ?: 6 ),
+			'raised' => dtp_fund_value( $o['raised'] ?? '', 'DTP_FUND_RAISED', 15546 ),
+			'goal'   => dtp_fund_value( $o['goal'] ?? '', 'DTP_FUND_GOAL', 50000 ),
+			'days'   => dtp_fund_value( $o['days'] ?? '', 'DTP_FUND_DAYS', 6 ),
 		] );
 	}
 	return $fund;
+}
+
+/**
+ * Первое непустое число из: значение в админке → константа окружения →
+ * встроенный запасной вариант. Пустые строки/мусор пропускает.
+ */
+function dtp_fund_value( $admin, $env_key, $default ) {
+	foreach ( [ $admin, dtp_config( $env_key ) ] as $v ) {
+		if ( is_numeric( $v ) && (float) $v >= 0 ) {
+			return (int) $v;
+		}
+	}
+	return $default;
 }
 
 /** 15546 → «15 546» (в макете пробельные группы тысяч). */
@@ -151,6 +167,86 @@ add_shortcode( 'dtp_fund_bar', function () {
 		. '<span class="dtp-fund__days">' . esc_html( dtp_fund_days() ) . '</span>'
 		. '</div>';
 } );
+
+/**
+ * Админка «Настройки → Данные сбора»: собрано/цель/дней до конца.
+ * Стандартный Settings API; пустое поле = значение из .env или встроенное
+ * (подсказка справа показывает, что именно подставится сейчас).
+ */
+add_action( 'admin_menu', function () {
+	add_options_page(
+		'Данные сбора «Поддержать проект»',
+		'Данные сбора',
+		'manage_options',
+		'dtp-fund',
+		'dtp_fund_settings_page'
+	);
+} );
+
+add_action( 'admin_init', function () {
+	register_setting( 'dtp_fund_settings', 'dtp_fund_settings', [
+		'type'              => 'array',
+		'sanitize_callback' => 'dtp_fund_sanitize',
+	] );
+	add_settings_section( 'dtp_fund_main', '', '__return_false', 'dtp-fund' );
+	$fields = [
+		'raised' => [ 'Собрано, ₽', 'DTP_FUND_RAISED', 15546 ],
+		'goal'   => [ 'Цель, ₽', 'DTP_FUND_GOAL', 50000 ],
+		'days'   => [ 'Дней до конца сбора', 'DTP_FUND_DAYS', 6 ],
+	];
+	foreach ( $fields as $key => [ $label, $env_key, $default ] ) {
+		add_settings_field(
+			$key,
+			$label,
+			function () use ( $key, $env_key, $default ) {
+				$o   = get_option( 'dtp_fund_settings' );
+				$val = is_array( $o ) && isset( $o[ $key ] ) ? $o[ $key ] : '';
+				$fb  = dtp_fund_value( '', $env_key, $default );
+				printf(
+					'<input type="number" min="0" step="1" class="small-text" name="dtp_fund_settings[%s]" value="%s" placeholder="%s" /> <span class="description">пусто — из конфигурации: %s</span>',
+					esc_attr( $key ),
+					esc_attr( $val ),
+					esc_attr( number_format( (float) $fb, 0, '', ' ' ) ),
+					esc_html( dtp_num( $fb ) )
+				);
+			},
+			'dtp-fund',
+			'dtp_fund_main'
+		);
+	}
+} );
+
+/** В опцию идут только целые ≥ 0; пустое поле сохраняется пустым (значит «не задано»). */
+function dtp_fund_sanitize( $in ) {
+	$out = [];
+	foreach ( [ 'raised', 'goal', 'days' ] as $key ) {
+		$v        = is_array( $in ) && isset( $in[ $key ] ) ? $in[ $key ] : '';
+		$out[ $key ] = is_numeric( $v ) && (float) $v >= 0 ? (int) $v : '';
+	}
+	return $out;
+}
+
+function dtp_fund_settings_page() {
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	$f = dtp_fund();
+	?>
+	<div class="wrap">
+		<h1>Данные сбора «Поддержать проект»</h1>
+		<p>Эти цифры показываются в футере, шапке и на странице «Поддержать проект»;
+			ширина полосы считается из них: <?php echo esc_html( dtp_num( $f['raised'] ) ); ?> из
+			<?php echo esc_html( dtp_num( $f['goal'] ) ); ?> ₽ = <?php echo esc_html( round( $f['goal'] > 0 ? 100 * $f['raised'] / $f['goal'] : 0, 2 ) ); ?>%.</p>
+		<form method="post" action="options.php">
+			<?php
+			settings_fields( 'dtp_fund_settings' );
+			do_settings_sections( 'dtp-fund' );
+			submit_button( 'Сохранить' );
+			?>
+		</form>
+	</div>
+	<?php
+}
 
 /**
  * Фильтры блога (GET-параметры формы в home.php):
