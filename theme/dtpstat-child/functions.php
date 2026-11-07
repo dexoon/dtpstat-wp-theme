@@ -6,7 +6,7 @@
 
 add_action( 'wp_enqueue_scripts', function () {
 	$dir = get_stylesheet_directory_uri();
-	$ver = '0.2.45';
+	$ver = '0.2.46';
 
 	// Бургер-меню — на всех страницах (на главной футера нет).
 	wp_enqueue_script( 'dtpstat-main', $dir . '/assets/js/main.js', [], $ver, true );
@@ -203,7 +203,7 @@ add_action( 'admin_init', function () {
 				$val = is_array( $o ) && isset( $o[ $key ] ) ? $o[ $key ] : '';
 				$fb  = dtp_fund_value( '', $env_key, $default );
 				printf(
-					'<input type="number" min="0" step="1" class="small-text" name="dtp_fund_settings[%s]" value="%s" placeholder="%s" /> <span class="description">пусто — из конфигурации: %s</span>',
+					'<input type="number" min="0" step="1" name="dtp_fund_settings[%s]" value="%s" placeholder="%s" style="width:110px" /> <span class="description">пусто — из конфигурации: %s</span>',
 					esc_attr( $key ),
 					esc_attr( $val ),
 					esc_attr( number_format( (float) $fb, 0, '', ' ' ) ),
