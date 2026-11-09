@@ -19,7 +19,7 @@
 					<span class="dtp-fund__days"><?php echo esc_html( dtp_fund_days() ); ?></span>
 				</div>
 			</div>
-			<a class="dtp-btn" href="<?php echo esc_url( home_url( '/support-project/' ) ); ?>">Поддержать проект</a>
+			<a class="dtp-btn" href="<?php echo esc_url( home_url( '/donate/' ) ); ?>">Поддержать проект</a>
 		</div>
 
 		<hr>

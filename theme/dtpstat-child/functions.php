@@ -6,7 +6,7 @@
 
 add_action( 'wp_enqueue_scripts', function () {
 	$dir = get_stylesheet_directory_uri();
-	$ver = '0.2.46';
+	$ver = '0.2.47';
 
 	// Бургер-меню — на всех страницах (на главной футера нет).
 	wp_enqueue_script( 'dtpstat-main', $dir . '/assets/js/main.js', [], $ver, true );
@@ -24,8 +24,8 @@ add_action( 'wp_enqueue_scripts', function () {
 	wp_dequeue_style( 'neve-style' );
 	wp_deregister_style( 'neve-style' );
 
-	// Скачивание файлов на странице «Скачать данные».
-	if ( is_page( 'download' ) ) {
+	// Скачивание файлов на странице «Скачать данные» (исторический адрес /opendata/).
+	if ( is_page( 'opendata' ) ) {
 		wp_enqueue_script( 'dtpstat-download', $dir . '/assets/js/download.js', [], $ver, true );
 	}
 
@@ -331,6 +331,33 @@ function dtp_pages_url() {
 function dtp_map_url() {
 	return dtp_external_url( 'DTP_MAP_URL' ) ?: dtp_pages_url();
 }
+
+/**
+ * Исторические адреса страниц (как на старом сайте). Страницы переехали:
+ *   news → blog, download → opendata, support-project → donate,
+ * «О проекте» уже на /project/. Прежние адреса обоих сайтов отдаём 301-м:
+ *   /news/<что-то>/ → /blog/<что-то>/ (посты и так живут на /blog/<slug>/),
+ *   /pages/about/ (и соседние /pages/…) → актуальные адреса.
+ */
+add_action( 'template_redirect', function () {
+	$path = trim( (string) parse_url( $_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH ), '/' );
+	if ( preg_match( '#^news/(.+)$#', $path, $m ) ) {
+		wp_redirect( home_url( '/blog/' . $m[1] . '/' ), 301 );
+		exit;
+	}
+	$map = [
+		'pages/about'      => '/project/',
+		'pages/opendata'   => '/opendata/',
+		'pages/donate'     => '/donate/',
+		'news'             => '/blog/',
+		'download'         => '/opendata/',
+		'support-project'  => '/donate/',
+	];
+	if ( isset( $map[ $path ] ) ) {
+		wp_redirect( home_url( $map[ $path ] ), 301 );
+		exit;
+	}
+} );
 
 /**
  * Индивидуальные ДТП: /dtp/<EM_NUMBER>/ — карточка аварии из dtpstat-pages

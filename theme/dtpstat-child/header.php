@@ -33,14 +33,14 @@
 			<?php // на мобильных кнопка «Поддержать проект» из шапки скрыта —
 			  // дублируем её ссылкой в открывающемся меню, иначе страницу не достать
 			?>
-			<a class="dtp-nav__support" href="<?php echo esc_url( home_url( '/support-project/' ) ); ?>">Поддержать проект</a>
+			<a class="dtp-nav__support" href="<?php echo esc_url( home_url( '/donate/' ) ); ?>">Поддержать проект</a>
 		</nav>
 
 		<button class="dtp-burger" aria-label="Меню">
 			<span></span><span></span><span></span>
 		</button>
 
-		<a class="dtp-btn" href="<?php echo esc_url( home_url( '/support-project/' ) ); ?>">Поддержать проект</a>
+		<a class="dtp-btn" href="<?php echo esc_url( home_url( '/donate/' ) ); ?>">Поддержать проект</a>
 	</div>
 </header>
 
