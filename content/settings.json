@@ -4,7 +4,7 @@
   "blogdescription": "",
   "pages": {
     "front": "home",
-    "posts": "news",
+    "posts": "blog",
     "privacy": "privacy-policy"
   },
   "options": {
@@ -58,11 +58,11 @@
       "items": [
         {
           "title": "Блог и исследования",
-          "page": "news"
+          "page": "blog"
         },
         {
           "title": "Скачать данные",
-          "page": "download"
+          "page": "opendata"
         },
         {
           "title": "О проекте",
@@ -79,11 +79,11 @@
       "items": [
         {
           "title": "Блог и исследования",
-          "page": "news"
+          "page": "blog"
         },
         {
           "title": "Скачать данные",
-          "page": "download"
+          "page": "opendata"
         },
         {
           "title": "О проекте",

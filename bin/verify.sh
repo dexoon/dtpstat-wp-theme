@@ -80,8 +80,8 @@ check "GET /"                 "$(http_code "$URL/")" "200"
 # фронт-страница перенаправляет на свой permalink — 301 это норма
 FCODE=$(http_code "$URL/$FRONT_SLUG/")
 check "GET /$FRONT_SLUG/ (редирект на /)" "$([[ $FCODE == 200 || $FCODE == 301 ]] && echo ok)" "ok"
-check "GET /download/"        "$(http_code "$URL/download/")" "200"
-check "GET /support-project/" "$(http_code "$URL/support-project/")" "200"
+check "GET /opendata/"        "$(http_code "$URL/opendata/")" "200"
+check "GET /donate/" "$(http_code "$URL/donate/")" "200"
 check "GET /project/"         "$(http_code "$URL/project/")" "200"
 check "GET /join-team/"       "$(http_code "$URL/join-team/")" "200"
 check "шрифт Roboto"          "$(http_code "$URL/wp-content/themes/dtpstat-child/assets/fonts/Roboto-Regular.woff2")" "200"
@@ -93,9 +93,9 @@ ge() { # имя, получено, минимум
   if [[ $2 -ge $3 ]] 2>/dev/null; then echo "   ok   $1 ($2)"; else echo "   FAIL $1: получено «$2», минимум $3"; FAIL=1; fi
 }
 ge "главная: карта (.dtp-map)"       "$(body "$URL/" | grep -c 'dtp-map' || true)" 1
-ge "download: поиск (.js-dl-search)" "$(body "$URL/download/" | grep -c 'js-dl-search' || true)" 1
-ge "support-project: [dtp_fund_bar]" "$(body "$URL/support-project/" | grep -c 'dtp-fund__fill' || true)" 1
-ge "support-project: промо-SVG"      "$(body "$URL/support-project/" | grep -c 'promo/tribute-logo.svg' || true)" 1
+ge "opendata: поиск (.js-dl-search)" "$(body "$URL/opendata/" | grep -c 'js-dl-search' || true)" 1
+ge "donate: [dtp_fund_bar]" "$(body "$URL/donate/" | grep -c 'dtp-fund__fill' || true)" 1
+ge "donate: промо-SVG"      "$(body "$URL/donate/" | grep -c 'promo/tribute-logo.svg' || true)" 1
 ge "project: карточки команды"       "$(body "$URL/project/" | grep -o 'class="dtp-person' | wc -l)" "$WANT_PERSONS"
 ge "join-team: карточки вакансий"    "$(body "$URL/join-team/" | grep -o 'class="dtp-job' | wc -l)" 3
 

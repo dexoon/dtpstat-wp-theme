@@ -1681,10 +1681,10 @@
 </item>
 <item>
   <title><![CDATA[Скачать данные]]></title>
-  <link>http://localhost:8080/download/</link>
+  <link>http://localhost:8080/opendata/</link>
   <pubDate>Mon, 27 Jan 2020 08:05:29 +0000</pubDate>
   <dc:creator>ilya</dc:creator>
-  <guid isPermaLink="false">http://localhost:8080/download/</guid>
+  <guid isPermaLink="false">http://localhost:8080/opendata/</guid>
   <description/>
   <content:encoded><![CDATA[<div class="dtp-dl-head"><h1 class="dtp-page__title">Скачать данные</h1><a class="dtp-apilink js-acc" href="#dtp-api" data-target="dtp-api">Инструкция для API</a></div>
 <p class="dtp-intro">Здесь вы можете скачать данные по ДТП, чтобы использовать их в исследованиях и анализировать с помощью своих инструментов. Первоисточник данных — официальный сайт ГИБДД, но эти данные приведены с изменениями (например, корректировки координат).</p>
@@ -1821,7 +1821,7 @@
   <wp:post_modified_gmt>2026-09-03 09:02:49</wp:post_modified_gmt>
   <wp:comment_status>closed</wp:comment_status>
   <wp:ping_status>closed</wp:ping_status>
-  <wp:post_name>download</wp:post_name>
+  <wp:post_name>opendata</wp:post_name>
   <wp:status>publish</wp:status>
   <wp:post_parent>0</wp:post_parent>
   <wp:menu_order>2</wp:menu_order>
@@ -1898,10 +1898,10 @@
 </item>
 <item>
   <title><![CDATA[Блог и исследования]]></title>
-  <link>http://localhost:8080/news/</link>
+  <link>http://localhost:8080/blog/</link>
   <pubDate>Mon, 13 Jan 2020 10:41:00 +0000</pubDate>
   <dc:creator>ilya</dc:creator>
-  <guid isPermaLink="false">http://localhost:8080/news/</guid>
+  <guid isPermaLink="false">http://localhost:8080/blog/</guid>
   <description/>
   <content:encoded><![CDATA[<!-- wp:quote -->
 <blockquote class="wp-block-quote"><!-- wp:paragraph -->
@@ -1920,7 +1920,7 @@
   <wp:post_modified_gmt>2026-09-01 17:50:33</wp:post_modified_gmt>
   <wp:comment_status>closed</wp:comment_status>
   <wp:ping_status>closed</wp:ping_status>
-  <wp:post_name>news</wp:post_name>
+  <wp:post_name>blog</wp:post_name>
   <wp:status>publish</wp:status>
   <wp:post_parent>0</wp:post_parent>
   <wp:menu_order>3</wp:menu_order>
@@ -1973,10 +1973,10 @@ style="border:none; height:calc(100vh - 100px);">
 </item>
 <item>
   <title><![CDATA[Поддержать проект]]></title>
-  <link>http://localhost:8080/support-project/</link>
+  <link>http://localhost:8080/donate/</link>
   <pubDate>Mon, 16 Mar 2026 11:40:34 +0000</pubDate>
   <dc:creator>ilya</dc:creator>
-  <guid isPermaLink="false">http://localhost:8080/support-project/</guid>
+  <guid isPermaLink="false">http://localhost:8080/donate/</guid>
   <description/>
   <content:encoded><![CDATA[<!-- wp:html -->
 <div class="dtp-fundbox">[dtp_fund_bar]<div class="dtp-payways"><a class="dtp-payway dtp-payway--boosty" href="https://boosty.to/dtp-stat" target="_blank" rel="noopener"><span class="dtp-payway__logo"><img src="/wp-content/themes/dtpstat-child/assets/img/promo/boosty-logo.svg?v=3" alt="Boosty" width="160" height="44"></span><small>₽, $, €</small></a><a class="dtp-payway dtp-payway--tribute" href="https://t.me/tribute/app?startapp=dtgX" target="_blank" rel="noopener"><span class="dtp-payway__logo"><img src="/wp-content/themes/dtpstat-child/assets/img/promo/tribute-logo.svg?v=3" alt="Tribute" width="160" height="41"></span><small>₽, $, €, USDT, BTC</small></a><a class="dtp-payway dtp-payway--patreon" href="https://www.patreon.com/crash_map" target="_blank" rel="noopener"><span class="dtp-payway__logo"><img src="/wp-content/themes/dtpstat-child/assets/img/promo/patreon-logo.svg?v=3" alt="Patreon" width="168" height="34"></span><small>$, €, £ и другие</small></a></div><div class="dtp-bigdonate"><div class="dtp-bigdonate__text"><b>Для крупных пожертвований</b>Если хотите внести большую сумму — напишите нам в Телеграм</div><a class="dtp-btn" href="https://t.me/shehovsov_md" target="_blank" rel="noopener">Написать в Телеграм</a></div></div>
@@ -2010,7 +2010,7 @@ style="border:none; height:calc(100vh - 100px);">
   <wp:post_modified_gmt>2026-09-01 17:50:28</wp:post_modified_gmt>
   <wp:comment_status>closed</wp:comment_status>
   <wp:ping_status>closed</wp:ping_status>
-  <wp:post_name>support-project</wp:post_name>
+  <wp:post_name>donate</wp:post_name>
   <wp:status>publish</wp:status>
   <wp:post_parent>0</wp:post_parent>
   <wp:menu_order>4</wp:menu_order>

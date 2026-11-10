@@ -145,7 +145,7 @@ data = {
     "source_url": os.environ["SRC_URL"],
     "blogname": os.environ["O_BLOGNAME"],
     "blogdescription": os.environ["O_BLOGDESCRIPTION"],
-    "pages": {"front": "home", "posts": "news", "privacy": privacy},
+    "pages": {"front": "home", "posts": "blog", "privacy": privacy},
     "options": {
         "permalink_structure": os.environ["O_PERMALINK"],
         "posts_per_page": int(os.environ["O_PPP"]),
